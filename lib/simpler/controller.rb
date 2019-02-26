@@ -47,7 +47,6 @@ module Simpler
     def write_response
       @response.write(render_body)
       @response['Content-Type'] = view.renderer.header
-      headers_content_type(@response['Content-Type']) # уже не понимаю..надо это или нет..
     end
 
     def render_body

@@ -5,7 +5,7 @@
 /db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
-*/lib/log/*.log
+/log/*.*
 /tmp/*
 /lib/simpler_log/*.log
 # Ignore uploaded files in development
