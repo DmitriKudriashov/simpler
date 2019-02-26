@@ -2,10 +2,17 @@ class TestsController < Simpler::Controller
 
   def index
     @time = Time.now
+    @tests = Test.all
+
+    status(201)
+    # render plain: 'For Test Only ! '
   end
 
-  def create
+  def create; end
 
+  def show
+    @time = Time.now
+    # render plain: 'SHOW ! Test Only ! '
+    @params = params
   end
-
 end

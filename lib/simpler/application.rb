@@ -1,6 +1,7 @@
 require 'yaml'
 require 'singleton'
 require 'sequel'
+require 'byebug'
 require_relative 'router'
 require_relative 'controller'
 
@@ -40,7 +41,7 @@ module Simpler
       Dir["#{Simpler.root}/app/**/*.rb"].each { |file| require file }
     end
 
-    def require_routes
+    def require_routes  
       require Simpler.root.join('config/routes')
     end
 

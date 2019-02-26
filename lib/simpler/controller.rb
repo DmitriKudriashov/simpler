@@ -3,7 +3,7 @@ require_relative 'view'
 module Simpler
   class Controller
 
-    attr_reader :name, :request, :response
+    attr_reader :name, :view,  :request, :response
 
     def initialize(env)
       @name = extract_name
@@ -14,15 +14,27 @@ module Simpler
     def make_response(action)
       @request.env['simpler.controller'] = self
       @request.env['simpler.action'] = action
-
+      @request.env['simpler.render_template'] = { html: 'Default!'}
       set_default_headers
       send(action)
       write_response
-
+      # byebug
       @response.finish
     end
 
     private
+
+    def status(code)
+      @response.status = code
+    end
+
+    def headers_content_type(type)
+      headers['Content-Type'] = type
+    end
+
+    def headers
+      @response.headers
+    end
 
     def extract_name
       self.class.name.match('(?<name>.+)Controller')[:name].downcase
@@ -33,22 +45,23 @@ module Simpler
     end
 
     def write_response
-      body = render_body
-
-      @response.write(body)
+      @response.write(render_body)
+      @response['Content-Type'] = view.renderer.header
     end
 
     def render_body
-      View.new(@request.env).render(binding)
+      @view = View.new(@request.env)
+
+      @view.render(binding)
     end
 
     def params
-      @request.params
+      @request.env['simpler.params'].merge!(@request.params)
     end
 
     def render(template)
-      @request.env['simpler.template'] = template
+      @request.env['simpler.render_template'] = template
     end
+ end
 
-  end
 end
